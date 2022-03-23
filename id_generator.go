@@ -59,6 +59,9 @@ func (idGenerator *IDGenerator) Allocate() (id int64, err error) {
 // param:
 //  - id: id to free
 func (idGenerator *IDGenerator) FreeID(id int64) {
+	if id < idGenerator.minValue || id > idGenerator.maxValue {
+		return
+	}
 	idGenerator.lock.Lock()
 	defer idGenerator.lock.Unlock()
 	delete(idGenerator.usedMap, id-idGenerator.minValue)
